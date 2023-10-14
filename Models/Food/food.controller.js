@@ -14,10 +14,27 @@ const deleteImage = file => {
   })
 }
 
+module.exports.getFood = async (req, res, next) => {
+  try {
+    const result = await Foods.find({})
+    res.status(200).json({
+      status: 'Success',
+      message: 'Food successfully fetched',
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Fail to Fetch food'
+    })
+  }
+}
+
 module.exports.postFood = async (req, res, next) => {
   try {
     const data = req.body
-    const image = req.file.path
+    const image = 'http://localhost:5000/images/' + req.file.filename
+    console.log(req.file)
     data.imageURL = image
     const result = await Foods.create(data)
 

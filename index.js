@@ -9,6 +9,7 @@ const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const m2s = require('mongoose-to-swagger')
 const port = 5000 || PROCESS.ENV.PORT
+const path = require('path')
 
 const options = {
   definition: {
@@ -50,6 +51,14 @@ const foodRouter = require('./Models/Food/food.route')
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/admin', adminRouter)
 app.use('/api/v1/foods', foodRouter)
+
+// get the image from local storage
+app.get('/images/:filename', (req, res) => {
+  const { filename } = req.params
+  const imagePath = path.join(__dirname, './images', filename)
+
+  res.sendFile(imagePath)
+})
 
 /**
  * @swagger

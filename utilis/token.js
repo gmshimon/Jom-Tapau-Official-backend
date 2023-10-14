@@ -7,7 +7,7 @@ module.exports.generateToken = userInfo => {
   }
 
   const token = jwt.sign(playLoad, process.env.TOKEN_SECRET, {
-    expiresIn: '1000s'
+    expiresIn: '100000s'
   })
 
   return token
