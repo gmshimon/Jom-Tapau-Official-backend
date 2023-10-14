@@ -31,6 +31,9 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
+// Parse form data
+app.use(bodyParser.urlencoded({ extended: true }))
+
 const swaggerSpec = swaggerJSDoc(options)
 app.use('/api/v1/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
