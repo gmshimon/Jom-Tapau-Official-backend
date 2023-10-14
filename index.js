@@ -1,22 +1,91 @@
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
+// const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
+const mongoose = require('mongoose')
 const express = require('express')
 const cors = require('cors')
 var bodyParser = require('body-parser')
 const { query } = require('express')
 require('dotenv').config()
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
+const m2s = require('mongoose-to-swagger')
 const port = 5000 || PROCESS.ENV.PORT
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Jom Tapau Api Project',
+      version: '2.0'
+    },
+    servers: [
+      {
+        url: 'http://localhost:5000/'
+      }
+    ]
+  },
+  apis: ['./index.js']
+}
 
 //middleware
 const app = express()
 app.use(express.json())
 app.use(cors())
 
-const stripe = require("stripe")('sk_test_51MMoiTGFkQKcRUEsTZeNAQCl8HGEsoTTYy1Lf2KfBsJKpOCcp44rzQVzUXOzyVkWkEIG9zj1TbzsQvsWpcJAPwhK00RLdVbM1g');
+const swaggerSpec = swaggerJSDoc(options)
+app.use('/api/v1/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
+//database connection
+mongoose.connect('mongodb://127.0.0.1:27017/Jom-tapau').then(() => {
+  console.log('Database connected successfully')
+})
+
+const userRouter = require('./Models/User/user.route')
+const User = require('./Models/User/User.modules')
+const userSchemaSwagger = m2s(User)
+// console.log(userSchemaSwagger)
+/**
+ * @swagger
+ * /api/v1/user/signup:
+ *   post:
+ *     summary: Used to insert data into MongoDB
+ *     description: This API is for user registration.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/userSchemaSwagger'
+ *     responses:
+ *       200:
+ *         description: Added Successfully
+ */
+
+app.use('/api/v1/user', userRouter)
+
+/**
+ * @swagger
+ * /:
+ *  get:
+ *     summary: This api is to check if get method is working or not
+ *     description: This is api is user to check if get method is working or
+ *     responses:
+ *         200 :
+ *              description: To test Get Method
+ */
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Jom Tapau')
+})
+app.listen(port, () => {
+  console.log('Listening on port', port)
+})
+
+/* const stripe = require("stripe")('sk_test_51MMoiTGFkQKcRUEsTZeNAQCl8HGEsoTTYy1Lf2KfBsJKpOCcp44rzQVzUXOzyVkWkEIG9zj1TbzsQvsWpcJAPwhK00RLdVbM1g');
 
 const user = process.env.DB_USER
 const password = process.env.DB_PASS
 
-const uri = `mongodb+srv://${user}:${password}@cluster0.xpxsbcb.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${user}:${password}@cluster0.0x4oldt.mongodb.net/?retryWrites=true&w=majority`
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -277,12 +346,4 @@ async function run () {
   } finally {
   }
 }
-run().catch(console.dir)
-app.get('/', (req, res) => {
-  res.send('Welcome to Jom Tapau');
-});
-app.listen(port, () => {
-  console.log('Listening on port', port);
-});
-
-
+run().catch(console.dir) */
