@@ -40,27 +40,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/Jom-tapau').then(() => {
 })
 
 const userRouter = require('./Models/User/user.route')
-const User = require('./Models/User/User.modules')
-const userSchemaSwagger = m2s(User)
-// console.log(userSchemaSwagger)
-/**
- * @swagger
- * /api/v1/user/signup:
- *   post:
- *     summary: Used to insert data into MongoDB
- *     description: This API is for user registration.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/userSchemaSwagger'
- *     responses:
- *       200:
- *         description: Added Successfully
- */
-
+const adminRouter = require('./Models/Admin/admin.route')
+const foodRouter = require('./Models/Food/food.route')
+// const User = require('./Models/User/User.modules')
+// const userSchemaSwagger = m2s(User)
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/admin', adminRouter)
+app.use('/api/v1/foods', foodRouter)
 
 /**
  * @swagger

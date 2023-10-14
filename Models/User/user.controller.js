@@ -2,6 +2,7 @@ const express = require('express')
 const User = require('./User.modules')
 const bcrypt = require('bcrypt')
 const { generateToken } = require('../../utilis/token')
+const { ObjectId } = require('mongodb')
 
 module.exports.postUser = async (req, res, next) => {
   try {
