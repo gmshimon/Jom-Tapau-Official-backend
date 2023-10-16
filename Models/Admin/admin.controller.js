@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const User = require('../User/User.modules')
+const Riders = require('../Rider/rider.modules')
 
 module.exports.addRider = async (req, res, next) => {
   try {
@@ -13,6 +14,17 @@ module.exports.addRider = async (req, res, next) => {
         }
       }
     )
+    if (result.acknowledged) {
+      const user = await User.findOne({ _id: id })
+      const riderDetails = {
+        details: {
+          email: user.email,
+          id: id
+        },
+        rider: 'accepted'
+      }
+      const riderAdd = await Riders.create(riderDetails)
+    }
     res.status(200).json({
       status: 'success',
       message: 'Rider has been accepted',
@@ -21,7 +33,7 @@ module.exports.addRider = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: 'Fail',
-      message: 'Failed to login',
+      message: 'Failed to Accept rider',
       error: error.message
     })
   }

@@ -100,7 +100,6 @@ module.exports.updateProfile = async (req, res, next) => {
       query.$set[key] = userDetails[key]
     }
 
-    console.log(query)
     const result = await User.updateOne({ _id: id }, query)
     res.status(200).json({
       status: 'success',
