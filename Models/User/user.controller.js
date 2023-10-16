@@ -82,3 +82,36 @@ module.exports.getMe = async (req, res, next) => {
     })
   }
 }
+
+module.exports.updateProfile = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const userDetails = req.body
+    const userFieldName = ['name', 'email', 'phoneNumber', 'address']
+
+    let query = { $set: {} }
+    for (const key in userDetails) {
+      const isKey = userFieldName.find(x => x === key)
+      if (!isKey)
+        return res.status(500).json({
+          status: 'Fail',
+          message: 'Failed to update user'
+        })
+      query.$set[key] = userDetails[key]
+    }
+
+    console.log(query)
+    const result = await User.updateOne({ _id: id }, query)
+    res.status(200).json({
+      status: 'success',
+      message: 'Verified',
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Failed to update user',
+      error: error.message
+    })
+  }
+}

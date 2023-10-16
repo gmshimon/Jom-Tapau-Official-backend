@@ -10,33 +10,11 @@ const swaggerUi = require('swagger-ui-express')
 const m2s = require('mongoose-to-swagger')
 const port = 5000 || PROCESS.ENV.PORT
 const path = require('path')
-
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Jom Tapau Api Project',
-      version: '2.0'
-    },
-    servers: [
-      {
-        url: 'http://localhost:5000/'
-      }
-    ]
-  },
-  apis: ['./index.js']
-}
-
+const swaggerDocs = require('./utilis/swagger')
 //middleware
 const app = express()
 app.use(express.json())
 app.use(cors())
-
-// Parse form data
-app.use(bodyParser.urlencoded({ extended: true }))
-
-const swaggerSpec = swaggerJSDoc(options)
-app.use('/api/v1/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 //database connection
 mongoose.connect('mongodb://127.0.0.1:27017/Jom-tapau').then(() => {
@@ -46,11 +24,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/Jom-tapau').then(() => {
 const userRouter = require('./Models/User/user.route')
 const adminRouter = require('./Models/Admin/admin.route')
 const foodRouter = require('./Models/Food/food.route')
-// const User = require('./Models/User/User.modules')
-// const userSchemaSwagger = m2s(User)
-app.use('/api/v1/user', userRouter)
-app.use('/api/v1/admin', adminRouter)
-app.use('/api/v1/foods', foodRouter)
 
 // get the image from local storage
 app.get('/images/:filename', (req, res) => {
@@ -59,23 +32,16 @@ app.get('/images/:filename', (req, res) => {
 
   res.sendFile(imagePath)
 })
-
-/**
- * @swagger
- * /:
- *  get:
- *     summary: This api is to check if get method is working or not
- *     description: This is api is user to check if get method is working or
- *     responses:
- *         200 :
- *              description: To test Get Method
- */
-
 app.get('/', (req, res) => {
   res.send('Welcome to Jom Tapau')
 })
+
 app.listen(port, () => {
   console.log('Listening on port', port)
+  swaggerDocs(app, port)
+  app.use('/api/v1/user', userRouter)
+  app.use('/api/v1/admin', adminRouter)
+  app.use('/api/v1/foods', foodRouter)
 })
 
 /* const stripe = require("stripe")('sk_test_51MMoiTGFkQKcRUEsTZeNAQCl8HGEsoTTYy1Lf2KfBsJKpOCcp44rzQVzUXOzyVkWkEIG9zj1TbzsQvsWpcJAPwhK00RLdVbM1g');

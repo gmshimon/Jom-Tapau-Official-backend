@@ -1,6 +1,72 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: The name of the user.
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: The email address of the user.
+ *         imageURL:
+ *           type: string
+ *           format: uri
+ *           description: The URL of the user's image.
+ *         password:
+ *           type: string
+ *           description: The user's password.
+ *         confirmPassword:
+ *           type: string
+ *           description: Confirm the user's password.
+ *         phoneNumber:
+ *           type: string
+ *           description: The user's phone number.
+ *         address:
+ *           type: string
+ *           description: The user's address.
+ *         rider:
+ *           type: string
+ *           description: The user's rider status.
+ *           enum:
+ *             - pending
+ *             - accepted
+ *             - rejected
+ *         Admin:
+ *           type: boolean
+ *           description: Indicates if the user is an admin.
+ *         confirmationToken:
+ *           type: string
+ *           description: Token for email confirmation.
+ *         confirmationTokenExpires:
+ *           type: string
+ *           format: date-time
+ *           description: Expiry date for email confirmation token.
+ *         passwordChangedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date of last password change.
+ *         passwordResetToken:
+ *           type: string
+ *           description: Token for password reset.
+ *         passwordResetExpires:
+ *           type: string
+ *           format: date-time
+ *           description: Expiry date for password reset token.
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *         - confirmPassword
+ *         - phoneNumber
+ *         - address
+ */
 
 /* name, email, phoneNumber,matricValue,address,rider,Admin */
 const userSchema = mongoose.Schema(
