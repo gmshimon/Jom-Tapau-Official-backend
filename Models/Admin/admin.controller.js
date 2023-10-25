@@ -19,7 +19,7 @@ module.exports.addRider = async (req, res, next) => {
       const riderDetails = {
         details: {
           email: user.email,
-          id: id
+          user: id
         },
         rider: 'accepted'
       }
@@ -76,6 +76,26 @@ module.exports.getAllUsers = async (req, res, next) => {
     res.status(400).json({
       status: 'Fail',
       message: 'Failed to fetch User',
+      error: error.message
+    })
+  }
+}
+module.exports.getRider = async (req, res, next) => {
+  try {
+    const results = await Riders.find({}).populate({
+      path: 'details.user',
+      select: '-password'
+    })
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Rider fetched Successfully',
+      data: results
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Failed to fetch Rider',
       error: error.message
     })
   }
