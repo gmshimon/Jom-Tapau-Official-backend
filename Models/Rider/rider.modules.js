@@ -4,21 +4,15 @@ const validator = require('validator')
 
 const riderSchema = mongoose.Schema({
   details: {
-    email: {
-      type: String,
-      validate: [validator.isEmail, 'Please provide a valid email'],
-      required: [true, 'Must provide Rider email']
-    },
-    user: {
-      type: ObjectId,
-      ref: 'User',
-      required: [true, 'Must provide User ID']
-    }
+    type: ObjectId,
+    ref: 'User',
+    required: [true, 'Must provide User ID']
   },
+
   rider: {
     type: String,
     default: 'Accepted',
-    enum: ['pending', 'accepted', 'rejected']
+    enum: ['accepted', 'rejected']
   },
   completed_orders: [
     {

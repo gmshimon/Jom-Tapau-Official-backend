@@ -4,15 +4,8 @@ const mongoose = require('mongoose')
 
 const orderSchema = mongoose.Schema({
   user: {
-    email: {
-      type: String,
-      validate: [validator.isEmail, 'Please provide a valid email'],
-      required: [true, 'Must provide user email']
-    },
-    id: {
-      type: ObjectId,
-      ref: 'User'
-    }
+    type: ObjectId,
+    ref: 'User'
   },
   deliveryAddress: {
     type: String,
@@ -26,7 +19,7 @@ const orderSchema = mongoose.Schema({
       quantity: {
         type: Number
       },
-      id: {
+      food: {
         type: ObjectId,
         ref: 'Foods'
       }

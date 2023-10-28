@@ -24,6 +24,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/Jom-tapau').then(() => {
 const userRouter = require('./Models/User/user.route')
 const adminRouter = require('./Models/Admin/admin.route')
 const foodRouter = require('./Models/Food/food.route')
+const orderRouter = require('./Models/Order/order.route')
 
 // get the image from local storage
 app.get('/images/:filename', (req, res) => {
@@ -42,6 +43,7 @@ app.listen(port, () => {
   app.use('/api/v1/user', userRouter)
   app.use('/api/v1/admin', adminRouter)
   app.use('/api/v1/foods', foodRouter)
+  app.use('/api/v1/orders', orderRouter)
 })
 
 /* const stripe = require("stripe")('sk_test_51MMoiTGFkQKcRUEsTZeNAQCl8HGEsoTTYy1Lf2KfBsJKpOCcp44rzQVzUXOzyVkWkEIG9zj1TbzsQvsWpcJAPwhK00RLdVbM1g');
