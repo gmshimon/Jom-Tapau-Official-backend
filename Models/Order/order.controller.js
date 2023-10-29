@@ -86,3 +86,46 @@ module.exports.getMyOrder = async (req, res, next) => {
     })
   }
 }
+
+module.exports.cancelMyOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { id: userID } = req.user
+
+    const orders = await Orders.findOne({ _id: id, user: userID })
+    if (!orders) {
+      return res.status(404).json({
+        status: 'Fail',
+        message: 'NO Order Found'
+      })
+    }
+    if (orders.status != 'Pending') {
+      console.log('Inside: ', orders.status)
+      return res.status(403).json({
+        status: 'Fail',
+        message: `Order has been already ${orders.status}`
+      })
+    }
+
+    const result = await Orders.updateOne(
+      { _id: id },
+      {
+        $set: {
+          status: 'Cancel'
+        }
+      }
+    )
+
+    res.status(400).json({
+      status: 'success',
+      message: 'Order successfully cancelled',
+      data: orders
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Fail to cancel my order',
+      error: error.message
+    })
+  }
+}
