@@ -35,8 +35,6 @@ const foodSchema = m2s(Foods)
  *         description: Internal server error
  */
 
-router.route('/').get(VerifyAdmin, getFood)
-
 /**
  * @swagger
  * /api/v1/foods/{foodId}:
@@ -74,8 +72,6 @@ router.route('/').get(VerifyAdmin, getFood)
  *     bearerFormat: JWT
  */
 
-router.route('/:id').get(VerifyAdmin, getSingleFood)
-
 /**
  * @swagger
  * /api/v1/foods/delete-food/{foodId}:
@@ -99,8 +95,10 @@ router.route('/:id').get(VerifyAdmin, getSingleFood)
  *       500:
  *         description: Internal server error
  */
-
+router.route('/:id').get(VerifyAdmin, getSingleFood)
 router.route('/delete-food/:id').delete(VerifyAdmin, deleteFood)
+
+router.route('/').get(VerifyAdmin, getFood)
 
 router.route('/search-food').post(VerifyAdmin, searchFood)
 

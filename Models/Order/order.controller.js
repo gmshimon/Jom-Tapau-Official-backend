@@ -28,9 +28,13 @@ module.exports.getAllOrder = async (req, res, next) => {
         select: '-password -updatedAt -createdAt -Admin -rider'
       })
       .populate({
+        path: 'orders.food',
+        select: '_id name category imageURL price'
+      })
+      .populate({
         path: 'rider', // Populate the 'rider' field
         populate: {
-          path: 'user',
+          path: 'details',
           select: 'name phoneNumber '
         },
         select: '-rider -completed_orders -_id -__v'
@@ -44,6 +48,40 @@ module.exports.getAllOrder = async (req, res, next) => {
     res.status(400).json({
       status: 'Fail',
       message: 'Failed to get all order',
+      error: error.message
+    })
+  }
+}
+
+module.exports.getMyOrder = async (req, res, next) => {
+  try {
+    const { id } = req.user
+    const result = await Orders.find({ user: id })
+      .populate({
+        path: 'user',
+        select: '-password -updatedAt -createdAt -Admin -rider'
+      })
+      .populate({
+        path: 'orders.food',
+        select: '_id name category imageURL price'
+      })
+      .populate({
+        path: 'rider', // Populate the 'rider' field
+        populate: {
+          path: 'details',
+          select: 'name phoneNumber '
+        },
+        select: '-rider -completed_orders -_id -__v'
+      })
+    res.status(200).json({
+      status: 'Success',
+      message: 'Get my order successfully',
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Fail to get my order',
       error: error.message
     })
   }

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 
 module.exports.generateToken = userInfo => {
   const playLoad = {
+    id: userInfo._id,
     email: userInfo.email,
     admin: userInfo.Admin
   }
