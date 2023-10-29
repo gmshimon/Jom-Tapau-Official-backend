@@ -17,7 +17,11 @@ const deleteImage = file => {
 module.exports.postFood = async (req, res, next) => {
   try {
     const data = req.body
-    const image = 'http://localhost:5000/images/' + req.file.filename
+    // 'http://localhost:5000/images/' + req.file.filename
+
+    const image =
+      req.protocol + '://' + req.get('host') + '/images/' + req.file.filename
+
     data.imageURL = image
     const result = await Foods.create(data)
 

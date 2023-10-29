@@ -4,7 +4,6 @@ const Orders = require('./order.modules')
 module.exports.postOrder = async (req, res, next) => {
   try {
     const order = req.body
-    // console.log(req.protocol + '://' + req.get('host') + '/images')
     const result = await Orders.create(order)
     res.status(200).json({
       status: 'success',
